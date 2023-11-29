@@ -13,15 +13,15 @@ You'll get an error message because the code is not complete, so start by implem
 Create a document matching the size of the database with the duration of
 the query (in milliseconds):
 
-| size         | time (in ms) |
-|--------------|--------------|
-| 10           | ...          |
-| 100          | ...          |
-| 10000        | ...          |
-| 10,000       | ...          |
-| 50,000       | ...          |
-| 100,000      | ...          |
-| 1,000,000... | ...          |
+| size         | time (in ms)            |
+|--------------|-------------------------|
+| 10           | 0.506    ms    0.506 ms |
+| 100          | 0.512    ms    1     ms |
+| 1000         | 1.002    ms    1.497 ms |
+| 10,000       | 1.494    ms    2.5   ms |
+| 50,000       | 5.993    ms    6.5   ms |
+| 100,000      | 17.500   ms    19.5  ms |
+| 1,000,000... | 142.500  ms    181   ms |
 
 
 
@@ -33,6 +33,8 @@ smart :)
 
 
 Make a graph from the table. Does the result match what you would expect ?
+
+![Alt text](image.png)
 
 # Step 2 - measure performance with an index
 
@@ -49,3 +51,6 @@ CREATE UNIQUE INDEX index_contacts_email ON contacts(email);
 ```
 
 Make a graph for the new result. Does it match what you would expect ?
+measurement 0.5ms-1ms for each, making the result somewhat independent of the size
+
+![Alt text](image-1.png)

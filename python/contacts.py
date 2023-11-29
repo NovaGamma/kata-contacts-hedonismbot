@@ -14,19 +14,24 @@ class Contacts:
             cursor.execute(
                 """
                 CREATE TABLE contacts(
-                  id INTEGER PRIMARY KEY,
-                  name TEXT NOT NULL,
-                  email TEXT NOT NULL
-                )
+                id INTEGER PRIMARY KEY,
+                name TEXT NOT NULL,
+                email TEXT NOT NULL
+                );
               """
             )
+            cursor.execute("CREATE UNIQUE INDEX index_contacts_email ON contacts(email);")
             connection.commit()
         self.connection = sqlite3.connect(db_path)
         self.connection.row_factory = sqlite3.Row
 
     def insert_contacts(self, contacts):
         print("Inserting contacts ...")
-        # TODO
+        cursor = self.connection.cursor()
+        for name, email in contacts:
+            cursor.execute(f"INSERT INTO contacts (name, email) VALUES ('{name}', '{email}')") #(?,?)garantie une insertion sécurisée des données dans la base de données.
+            #print(f"Insertion de : {name}, {email}")
+        self.connection.commit()
 
     def get_name_for_email(self, email):
         print("Looking for email", email)
@@ -53,12 +58,26 @@ class Contacts:
 
 
 def yield_contacts(num_contacts):
-    # TODO: Generate a lot of contacts
-    # instead of just 3
-    yield ("Alice", "alice@domain.tld")
-    yield ("Bob", "bob@foo.com")
+    contacts = [
+        ("Alice", "@domain.tld"),
+        ("Bob", "@foo.com"),
+        ("Charlie", "@acme.corp"),
+        ("David", "@email.com"),
+        ("Eve", "@example.org"),
+        ("Frank", "@company.com"),
+        ("Grace", "@domain.net"),
+        ("Henry", "@business.io"),
+        ("Ivy", "@enterprise.com"),
+        ("Jack", "@startup.co"),
+        # Add more contacts here...
+        ]
+    counter = 0
+    while counter < num_contacts-1:
+        name, email = contacts[counter%(len(contacts)-1)]
+        email = f"{name.lower()}{counter}{email}"
+        yield (name, email)
+        counter += 1
     yield ("Charlie", "charlie@acme.corp")
-
 
 def main():
     num_contacts = int(sys.argv[1])
